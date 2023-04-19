@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CSCI3660 App</string>
+    <string name="reminder_name">Name:</string>
+    <string name="reminder_date">Date:</string>
+    <string name="pick_date">Date</string>
+    <string name="pick_time">Time</string>
+
+    <!--  Button -->
+    <string name="create">Create</string>
+</resources>
