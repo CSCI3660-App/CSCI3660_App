@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.DatePicker;
 import com.applandeo.materialcalendarview.EventDay;
@@ -21,6 +22,7 @@ import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,6 +65,17 @@ public class MainActivity extends AppCompatActivity {
         calendarView.setOnDayClickListener(eventDay ->
                 Toast.makeText(getApplicationContext(), eventDay.getCalendar().getTime().toString() + " "
                         + eventDay.isEnabled(), Toast.LENGTH_SHORT).show());
+
+        calendarView.setOnDayLongClickListener(eventDay ->
+        {
+            Intent intent = new Intent(this, ListActivity.class);
+            String newDate = eventDay.getCalendar().get(Calendar.MONTH) + "." + eventDay.getCalendar().get(Calendar.DAY_OF_MONTH) + "."
+                    + eventDay.getCalendar().get(Calendar.YEAR);
+
+            intent.putExtra("DAY", newDate);
+
+            startActivity(intent);
+        });
 
         SetCalendarEvents.createCalendarEvents();
         setCalendarEvents();
