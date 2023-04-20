@@ -10,11 +10,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CreateReminders extends AppCompatActivity {
     private ToDoList mToDoList;
+    private EventList mEventList;
     private EditText mItemEditText;
     private TextView mItemListTextView;
+    public static String item;
+    public ArrayList<String> events = new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +31,7 @@ public class CreateReminders extends AppCompatActivity {
         findViewById(R.id.clear_button).setOnClickListener(view -> clearButtonClick());
 
         mToDoList = new ToDoList(this);
+        mEventList = new EventList(this);
     }
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
@@ -44,6 +49,7 @@ public class CreateReminders extends AppCompatActivity {
         try {
             // Attempt to load a previously saved list
             mToDoList.readFromFile();
+            mEventList.readFromFile();
             displayList();
         }
         catch (IOException ex) {
@@ -58,6 +64,7 @@ public class CreateReminders extends AppCompatActivity {
         try {
             // Save list for later
             mToDoList.saveToFile();
+            mEventList.saveToFile();
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -67,7 +74,7 @@ public class CreateReminders extends AppCompatActivity {
     private void addButtonClick() {
 
         // Ignore any leading or trailing spaces
-        String item = mItemEditText.getText().toString().trim();
+        item = mItemEditText.getText().toString().trim();
 
         // Clear the EditText so it's ready for another item
         mItemEditText.setText("");
@@ -75,6 +82,7 @@ public class CreateReminders extends AppCompatActivity {
         // Add the item to the list and display it
         if (item.length() > 0) {
             mToDoList.addItem(item);
+            mEventList.addItem(item);
             displayList();
         }
     }
@@ -93,6 +101,7 @@ public class CreateReminders extends AppCompatActivity {
 
     private void clearButtonClick() {
         mToDoList.clear();
+        mEventList.clear();
         displayList();
     }
 }
