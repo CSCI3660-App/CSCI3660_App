@@ -144,7 +144,7 @@ public class ListActivity extends AppCompatActivity {
         int index = readFromReminder(day).size();
         if (index < LISTNNUM){
             clear();
-            addReminder(day, "zSample Reminder");
+            addReminder(day, "Reminder " + index);
             viewVisible[index] = true;
          //   Log.d("onAdd", day + " size of data array = " + index);
          //   Log.d("onAdd", "Array Contents: " + readFromReminder(day).toString());

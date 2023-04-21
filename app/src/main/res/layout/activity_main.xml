@@ -28,7 +28,8 @@
         android:layout_marginBottom="250dp"
         android:layout_marginLeft="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"/>
 
     <ImageButton
         android:id="@+id/refresh"
@@ -38,7 +39,8 @@
         android:layout_marginLeft="10dp"
         android:src="@drawable/baseline_refresh_24"
         app:layout_constraintTop_toBottomOf="@id/text"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -50,6 +52,7 @@
         android:src="@android:drawable/ic_input_add"
         android:onClick="createReminder"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
