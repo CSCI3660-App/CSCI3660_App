@@ -21,7 +21,7 @@ import com.applandeo.materialcalendarview.DatePicker;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
-import com.google.gson.JsonSerializationContext;
+//import com.google.json.JsonSerializationContext;
 
 import java.io.IOException;
 import java.util.ArrayList;

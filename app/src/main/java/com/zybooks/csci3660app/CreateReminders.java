@@ -1,8 +1,8 @@
 package com.zybooks.csci3660app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -104,4 +104,8 @@ public class CreateReminders extends AppCompatActivity {
         mEventList.clear();
         displayList();
     }
+    public void onReturnClick(View v){
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
 }
