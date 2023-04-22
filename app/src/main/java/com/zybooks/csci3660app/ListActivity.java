@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class ListActivity extends AppCompatActivity {
     private ImageButton[] buttonViews;
     boolean[] viewVisible = new boolean[LISTNNUM];
     FloatingActionButton addButton;
+    FloatingActionButton backButton;
     private String currentText;
     boolean editing;
 
@@ -44,6 +46,15 @@ public class ListActivity extends AppCompatActivity {
               onAdd(currentDay);
           }
       });
+
+        //back button
+        backButton = findViewById(R.id.floatingActionButton3);
+        backButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         // Initializing the arrays, listViews contains the edittext, buttonViews contains the X close buttons
         // There is another Array of booleans I declared earlier that contains a true or false for each listview/buttonview combo, determining if they are visible or hidden
@@ -213,4 +224,5 @@ public class ListActivity extends AppCompatActivity {
             }
         }
     }
+
 }
