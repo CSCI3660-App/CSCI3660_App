@@ -79,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
         SetCalendarEvents.createCalendarEvents();
         setCalendarEvents();
+
+        //calendar colors
+        calendarView.setHeaderLabelColor(getResources().getColor(R.color.teal_200));
+        calendarView.setHeaderColor(getResources().getColor(R.color.teal_700));
     }
 
     public void setCalendarEvents() {
