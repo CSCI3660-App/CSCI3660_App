@@ -12,9 +12,6 @@
         android:theme="@style/Theme.CSCI3660App"
         tools:targetApi="31">
         <activity
-            android:name=".CreateReminders"
-            android:exported="false" />
-        <activity
             android:name=".ListActivity"
             android:exported="false" />
         <activity

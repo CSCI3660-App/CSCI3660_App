@@ -14,19 +14,26 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.HashSet;
+import androidx.fragment.app.DialogFragment;
 
 
 public class ListActivity extends AppCompatActivity {
     public static final int LISTNNUM = 5;
     private TextView[] listViews;
+    private TextView[] timeViews;
     private ImageButton[] buttonViews;
     boolean[] viewVisible = new boolean[LISTNNUM];
     FloatingActionButton addButton;
     private String currentText;
     boolean editing;
+    static int mListItemHour;
+    static int mListItemMinute;
+    FloatingActionButton backButton;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -44,6 +51,14 @@ public class ListActivity extends AppCompatActivity {
               onAdd(currentDay);
           }
       });
+        //back button
+        backButton = findViewById(R.id.floatingActionButton3);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         // Initializing the arrays, listViews contains the edittext, buttonViews contains the X close buttons
         // There is another Array of booleans I declared earlier that contains a true or false for each listview/buttonview combo, determining if they are visible or hidden
@@ -53,6 +68,13 @@ public class ListActivity extends AppCompatActivity {
         listViews[2] = findViewById(R.id.rem3);
         listViews[3] = findViewById(R.id.rem4);
         listViews[4] = findViewById(R.id.rem5);
+
+        timeViews = new TextView[LISTNNUM];
+        timeViews[0] = findViewById(R.id.time1);
+        timeViews[1] = findViewById(R.id.time2);
+        timeViews[2] = findViewById(R.id.time3);
+        timeViews[3] = findViewById(R.id.time4);
+        timeViews[4] = findViewById(R.id.time5);
 
         buttonViews = new ImageButton[LISTNNUM];
         buttonViews[0] = findViewById(R.id.rem1minus);
@@ -70,6 +92,7 @@ public class ListActivity extends AppCompatActivity {
                     // Calls removeReminder, sets the current view to false, and resets the text
                     viewVisible[current] = false;
                     removeReminder(currentDay, listViews[current]);
+                    removeReminderTime(currentDay, timeViews[current]);
                     //listViews[current].setText("zSample Reminder");
                     fixText();
                     setVisibility();
@@ -120,6 +143,24 @@ public class ListActivity extends AppCompatActivity {
 
     }
 
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public static void setListItemTime(int hour, int minute) {
+        mListItemHour = hour;
+        mListItemMinute = minute;
+    }
+
+    public static int getListItemTimeHour() {
+        return mListItemHour;
+    }
+
+    public static int getListItemTimeMinute() {
+        return mListItemMinute;
+    }
+
     // Clears the screen
     public void clear() {
         for (int i = 0; i < LISTNNUM; i++) {
@@ -131,20 +172,24 @@ public class ListActivity extends AppCompatActivity {
         for (int i = 0; i < LISTNNUM; i++) {
             if (viewVisible[i]) {
                 listViews[i].setVisibility(View.VISIBLE);
+                timeViews[i].setVisibility(View.VISIBLE);
                 buttonViews[i].setVisibility(View.VISIBLE);
             }
             else {
                 listViews[i].setVisibility(View.GONE);
+                timeViews[i].setVisibility(View.GONE);
                 buttonViews[i].setVisibility(View.GONE);
             }
         }
     }
     // onAdd is called with the current date when the add button is clicked, I commented out some debugging logs
-    public void onAdd (String day) {
+    public void onAdd(String day) {
         int index = readFromReminder(day).size();
-        if (index < LISTNNUM){
+        int index1 = readFromReminderTimes(day).size();
+        if ((index < LISTNNUM) && (index1 < LISTNNUM)){
             clear();
-            addReminder(day, "zSample Reminder");
+            addReminder(day, "Set Reminder");
+            addReminderTime(day, " " + (getListItemTimeHour() + ":" + getListItemTimeMinute()));
             viewVisible[index] = true;
          //   Log.d("onAdd", day + " size of data array = " + index);
          //   Log.d("onAdd", "Array Contents: " + readFromReminder(day).toString());
@@ -157,15 +202,25 @@ public class ListActivity extends AppCompatActivity {
         SharedPreferences data = getSharedPreferences("myData", MODE_PRIVATE);
         return new ArrayList<>(data.getStringSet(day, new HashSet<>()));
     }
+
+    public ArrayList<String> readFromReminderTimes(String day){
+        SharedPreferences times = getSharedPreferences("myTimes", MODE_PRIVATE);
+        return new ArrayList<>(times.getStringSet(day, new HashSet<>()));
+    }
     // Sets the visibility and text of each reminder according to the corresponding size of the stringlist
     public void setData(String day) {
-
         ArrayList<String> stringList = readFromReminder(day);
+        ArrayList<String> stringListTimes = readFromReminderTimes(day);
         for (int i = 0; i < (stringList.size()); i++ ) {
             viewVisible[i] = true;
             listViews[i].setText(stringList.get(i));
         }
+        for (int i = 0; i < (stringListTimes.size()); i++ ) {
+            viewVisible[i] = true;
+            timeViews[i].setText(stringListTimes.get(i));
+        }
         setVisibility();
+        //MainActivity.setListData(day, viewVisible, listViews);
     }
     // Creates an arraylist of strings then pushes it to the mydata.xml, then calls setdata to update the visibility
     public void addReminder(String day, String text) {
@@ -176,6 +231,19 @@ public class ListActivity extends AppCompatActivity {
         editor.putStringSet(day, new HashSet<>(stringList));
         editor.apply();
         for(int i = 0; i < readFromReminder(day).size(); i++){
+            viewVisible[i] = true;
+        }
+        setData(day);
+    }
+
+    public void addReminderTime(String day, String time) {
+        SharedPreferences times = getSharedPreferences("myTimes", MODE_PRIVATE);
+        ArrayList<String> stringListTimes = new ArrayList<>(times.getStringSet(day, new HashSet<>()));
+        stringListTimes.add(time);
+        SharedPreferences.Editor editor = times.edit();
+        editor.putStringSet(day, new HashSet<>(stringListTimes));
+        editor.apply();
+        for(int i = 0; i < readFromReminderTimes(day).size(); i++){
             viewVisible[i] = true;
         }
         setData(day);
@@ -206,10 +274,21 @@ public class ListActivity extends AppCompatActivity {
         setData(day);
     }
 
+    public void removeReminderTime(String day, TextView view){
+        SharedPreferences times = getSharedPreferences("myTimes", MODE_PRIVATE);
+        ArrayList<String> stringListTimes = new ArrayList<>(times.getStringSet(day, new HashSet<>()));
+        stringListTimes.remove(view.getText().toString());
+        SharedPreferences.Editor editor = times.edit();
+        editor.putStringSet(day, new HashSet<>(stringListTimes));
+        editor.apply();
+        clear();
+        setData(day);
+    }
+
     public void fixText(){
         for (int i = 0; i < LISTNNUM; i++) {
             if (!viewVisible[i]) {
-                listViews[i].setText("zSample Reminder");
+                listViews[i].setText("Sample Reminder");
             }
         }
     }
