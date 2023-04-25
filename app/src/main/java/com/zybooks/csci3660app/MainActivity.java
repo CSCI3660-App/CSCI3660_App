@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 currentDay = eventDay.getCalendar().toString(),
                 displayReminders());*/
         calendarView.setOnDayClickListener(eventDay -> {
-            currentDay = eventDay.getCalendar().get(Calendar.MONTH) + "." + eventDay.getCalendar().get(Calendar.DAY_OF_MONTH) + "."
+            currentDay = (eventDay.getCalendar().get(Calendar.MONTH) + 1) + "." + eventDay.getCalendar().get(Calendar.DAY_OF_MONTH) + "."
                     + eventDay.getCalendar().get(Calendar.YEAR);
 
         });
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         calendarView.setOnDayLongClickListener(eventDay ->
         {
             Intent intent = new Intent(this, ListActivity.class);
-            String newDate = eventDay.getCalendar().get(Calendar.MONTH) + "." + eventDay.getCalendar().get(Calendar.DAY_OF_MONTH) + "."
+            String newDate = (eventDay.getCalendar().get(Calendar.MONTH) + 1) + "." + eventDay.getCalendar().get(Calendar.DAY_OF_MONTH) + "."
                     + eventDay.getCalendar().get(Calendar.YEAR);
 
             intent.putExtra("DAY", newDate);
@@ -63,12 +63,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void displayReminders() {
-        String[] calendarDays = new String[]{"3.1.2023", "3.2.2023", "3.3.2023", "3.4.2023", "3.5.2023", "3.6.2023", "3.7.2023", "3.8.2023"
-                , "3.9.2023", "3.10.2023", "3.11.2023", "3.12.2023", "3.13.2023", "3.14.2023", "3.15.2023", "3.16.2023", "3.17.2023", "3.18.2023", "3.19.2023"
-                , "3.20.2023", "3.21.2023", "3.22.2023", "3.23.2023", "3.24.2023", "3.25.2023", "3.26.2023", "3.27.2023", "3.28.2023", "3.29.2023", "3.30.2023"
-                , "3.31.2023"};
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH) + 1;
+        String[] calendarDays = new String[31];/*{"4.1.2023", "4.2.2023", "4.3.2023", "4.4.2023", "4.5.2023", "4.6.2023", "4.7.2023", "4.8.2023"
+                , "4.9.2023", "4.10.2023", "4.11.2023", "4.12.2023", "4.13.2023", "4.14.2023", "4.15.2023", "4.16.2023", "4.17.2023", "4.18.2023", "4.19.2023"
+                , "4.20.2023", "4.21.2023", "4.22.2023", "4.23.2023", "4.24.2023", "4.25.2023", "4.26.2023", "4.27.2023", "4.28.2023", "4.29.2023", "4.30.2023"
+                , "4.31.2023"};*/
+        for (int i = 0; i < 31; i++) {
+            calendarDays[i] = String.format("%d.%d.2023", month, i+1);
+        }
         SharedPreferences data = getSharedPreferences("myData", MODE_PRIVATE);
-        SharedPreferences times = getSharedPreferences("myTime", MODE_PRIVATE);
+        SharedPreferences times = getSharedPreferences("myTimes", MODE_PRIVATE);
         ArrayList<String> stringList;
         ArrayList<String> timesList;
         StringBuffer itemText = new StringBuffer();
@@ -79,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
                 itemText.append("");
             }
             else {
-                itemText.append(calendarDays[i]).append("\n");
+                itemText.append("\n" + calendarDays[i]).append("\n").append("__________").append("\n");
                 int loopCount = Math.min(stringList.size(), timesList.size());
                 for (int j = 0; j < loopCount; j++) {
-                    itemText.append(stringList.get(j) + " - ").append(timesList.get(j)).append("\n");
+                    itemText.append(stringList.get(j) + "  - ").append(timesList.get(j)).append("\n");
                 }
             }
             mItemListTextView.setText(itemText);
@@ -98,4 +103,11 @@ public class MainActivity extends AppCompatActivity {
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        displayReminders();
+    }
+
 }
