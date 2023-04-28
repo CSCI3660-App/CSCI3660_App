@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CSCI3660 App</string>
+    <string name="app_name">Reminder</string>
     <string name="reminder_name">Name:</string>
     <string name="reminder_date">Date:</string>
     <string name="pick_date">Date</string>

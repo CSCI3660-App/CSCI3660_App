@@ -13,6 +13,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -49,6 +51,8 @@ public class ListActivity extends AppCompatActivity {
           @Override
           public void onClick(View view) {
               onAdd(currentDay);
+              Toast.makeText(getApplicationContext(), "Reminder set @ " + getListItemTimeHour()
+                      + ":" + getListItemTimeMinute(), Toast.LENGTH_SHORT).show();
           }
       });
         //back button
@@ -93,7 +97,7 @@ public class ListActivity extends AppCompatActivity {
                     viewVisible[current] = false;
                     removeReminder(currentDay, listViews[current]);
                     removeReminderTime(currentDay, timeViews[current]);
-                    //listViews[current].setText("zSample Reminder");
+                    Toast.makeText(getApplicationContext(), "Reminder Removed", Toast.LENGTH_SHORT).show();
                     fixText();
                     setVisibility();
                 }
@@ -191,9 +195,6 @@ public class ListActivity extends AppCompatActivity {
             addReminder(day, "Set Reminder");
             addReminderTime(day, " " + (getListItemTimeHour() + ":" + getListItemTimeMinute()));
             viewVisible[index] = true;
-         //   Log.d("onAdd", day + " size of data array = " + index);
-         //   Log.d("onAdd", "Array Contents: " + readFromReminder(day).toString());
-         //   Log.d("onAdd", "everything ran");
         }
 
     }

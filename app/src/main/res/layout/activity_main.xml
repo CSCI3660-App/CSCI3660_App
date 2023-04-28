@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="Reminders"
+        android:textColor="#3e7ff7"
         android:textSize="25sp"
         android:layout_marginTop="390dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +49,7 @@
             android:layout_marginTop="10dp"
             android:scrollbars="vertical"
             android:textSize="16sp"
+            android:textColor="#ff91a9"
             tools:text="LIST" />
     </ScrollView>
 
